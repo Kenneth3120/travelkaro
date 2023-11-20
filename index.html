@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Travel Karo</title>
+    <!-- Include Tailwind CSS from a CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Include animate.css from a CDN for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+
+<body class="bg-black p-4"> <!-- Change background color to black -->
+
+    <!-- Navbar Starts here -->
+    <nav class="bg-red-500 p-4"> <!-- Change navbar color to red -->
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#" class="text-white font-bold text-lg">Travel Karo</a>
+
+            <!-- Mobile Menu Button (hidden on large screens) -->
+            <div class="block lg:hidden">
+                <button id="menuToggle" class="text-white hover:text-gray-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Desktop Menu (hidden on small screens) -->
+            <div class="hidden lg:flex space-x-4">
+                <a href="#" class="text-white hover:text-gray-200">Home</a>
+                <a href="#" class="text-white hover:text-gray-200">About</a>
+                <a href="#" class="text-white hover:text-gray-200">Services</a>
+                <a href="#" class="text-white hover:text-gray-200">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu (hidden on large screens) -->
+    <div id="mobileMenu" class="hidden lg:hidden animate__animated">
+        <div class="bg-red-500 p-4 animate__slideInDown"> <!-- Change mobile menu background color to red -->
+            <a href="#" class="block text-white font-bold text-lg mb-4">Money Minded</a>
+            <a href="#" class="block text-white hover:text-gray-200 py-2">Home</a>
+            <a href="#" class="block text-white hover:text-gray-200 py-2">About</a>
+            <a href="#" class="block text-white hover:text-gray-200 py-2">Services</a>
+            <a href="#" class="block text-white hover:text-gray-200 py-2">Contact</a>
+        </div>
+    </div>
+
+    <div class="container mx-auto flex flex-col lg:flex-row mt-4">
+        <!-- Content below navbar and to the left -->
+        <br>
+        <br>
+        <br>
+        <div id="typingText" class="text-white text-5xl font-bold mb-4 animate__animated animate__bounceInLeft">
+            <!-- Content will be typed here -->
+            
+        </div>
+
+        <div class="lg:ml-4">
+            <h1 class="text-2xl font-semibold mb-2">Welcome to Travel Karo!</h1>
+            <p class="text-White-100 mb-4">Calculate the estimated cost of your road trip.</p>
+
+            <!-- Your existing form and result elements -->
+
+
+
+            <div class="max-w-md mx-auto lg:mx-20 lg:ml-auto bg-blue-500 rounded p-4 shadow-md animate__animated animate__fadeIn bg-repeat">
+                <h1 class="text-2xl font-semibold mb-2">Welcome to Travel Karo!</h1>
+                <p class="text-White-100 mb-4">Calculate the estimated cost of your road trip.</p>
+            
+                <form id="tripForm" class="mb-4">
+                    <!-- < id="tripForm" class="mb-4"> -->
+                        <div class="mb-4">
+                            <label for="city" class="block font-semibold">Destination City:</label>
+                            <input type="text" id="city" class="w-full border border-gray-300 rounded p-2" required>
+                        </div>
+                
+                        <div class="mb-4">
+                            <label for="distance" class="block font-semibold">Total Distance (km):</label>
+                            <input type="number" id="distance" class="w-full border border-gray-300 rounded p-2" required>
+                        </div>
+                
+                        <div class="mb-4">
+                            <label for="mileage" class="block font-semibold">Vehicle Mileage (km/liter):</label>
+                            <input type="number" id="mileage" class="w-full border border-gray-300 rounded p-2" required>
+                        </div>
+                
+                        <div class="mb-4">
+                            <label for="petrolPrice" class="block font-semibold">Petrol Price (per liter):</label>
+                            <input type="number" id="petrolPrice" class="w-full border border-gray-300 rounded p-2" required>
+                        </div>
+                
+                        <div class="mb-4">
+                            <label for="dieselPrice" class="block font-semibold">Diesel Price (per liter):</label>
+                            <input type="number" id="dieselPrice" class="w-full border border-gray-300 rounded p-2" required>
+                        </div>
+                
+                        <!-- <button type="button" onclick="calculateCost()" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700">Calculate</button> -->
+                    
+                    <button type="button" onclick="calculateCost()" class="bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-black">Calculate</button>
+                </form>
+            
+                <h2 class="text-xl font-semibold">Results</h2>
+                <p id="fuelNeeded" class="text-gray-800 mb-2"></p>
+                <p id="petrolCost" class="text-gray-800 mb-2"></p>
+                <p id="dieselCost" class="text-gray-800"></p>
+            </div>
+
+            <!-- Image added below the animated text -->
+            <img src="images/33.svg" alt="Speed Image" class="mt-4 lg:ml-0">
+            
+            <!-- ... (remaining code) ... -->
+
+            
+        </div>
+    </div>
+    
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Text for typing animation
+            var textToType = "Discover Your Journey Estimated cost with Travel Karo!";
+            var typingSpeed = 100; // Adjust typing speed in milliseconds
+
+            var typingText = document.getElementById('typingText');
+            var textIndex = 0;
+
+            function typeText() {
+                typingText.textContent += textToType[textIndex];
+                textIndex++;
+
+                if (textIndex < textToType.length) {
+                    setTimeout(typeText, typingSpeed);
+                }
+            }
+
+            // Start typing animation
+            typeText();
+        });
+
+        // Toggle the mobile menu
+        document.getElementById('menuToggle').addEventListener('click', function () {
+            var mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+
+    <!-- Your existing JavaScript code for calculating cost -->
+
+    <script>
+        function calculateCost() {
+            const city = document.getElementById("city").value;
+            const totalDistance = parseFloat(document.getElementById("distance").value);
+            const vehicleMileage = parseFloat(document.getElementById("mileage").value);
+            const petrolPrice = parseFloat(document.getElementById("petrolPrice").value);
+            const dieselPrice = parseFloat(document.getElementById("dieselPrice").value);
+
+            const fuelNeeded = totalDistance / vehicleMileage;
+            const petrolCost = fuelNeeded * petrolPrice;
+            const dieselCost = fuelNeeded * dieselPrice;
+
+            document.getElementById("fuelNeeded").textContent = `Estimated fuel needed to travel to ${city}: ${fuelNeeded.toFixed(2)} liters`;
+            document.getElementById("petrolCost").textContent = `Estimated cost of the trip to ${city} using petrol: Rs${petrolCost.toFixed(2)}`;
+            document.getElementById("dieselCost").textContent = `Estimated cost of the trip to ${city} using diesel: Rs${dieselCost.toFixed(2)}`;
+        }
+    </script>
+
+</body>
+
+</html>
