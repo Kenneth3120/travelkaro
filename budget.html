@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Karo</title>
+    <!-- Include Tailwind CSS from a CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Include animate.css from a CDN for animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Include Chart.js from a CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-black p-4 bg-cover bg-center bg-no-repeat" style="background-image: url('images/2.svg')">
+    <!-- Your content goes here -->
+
+    <!-- Navbar Starts here -->
+    <!-- ... (Your existing navbar code) ... -->
+
+    <!-- New Section starts here -->
+    <!--<div class="container mx-auto flex flex-col lg:flex-row mt-4">
+        <div id="typingText" class="text-white text-5xl font-bold mb-4 animate__animated animate__bounceInLeft"></div>
+
+        <div class="lg:ml-4">-->
+            <!-- Your existing form and result elements -->
+            <div class="max-w-md mx-auto lg:mx-100 lg:ml-auto bg-blue-500 rounded p-4 shadow-md animate__animated animate__fadeIn bg-repeat">
+                <!-- ... (Your existing form elements) ... -->
+             <!-- <h2 class="text-xl font-semibold">Results</h2>
+                <p id="fuelNeeded" class="text-gray-800 mb-2"></p>
+                <p id="petrolCost" class="text-gray-800 mb-2"></p>
+                <p id="dieselCost" class="text-gray-800"></p>
+            </div>-->
+
+            <!-- Image added below the animated text -->
+            <!-- <img src="images/33.svg" alt="Speed Image" class="mt-4 lg:ml-0"> -->
+
+            <!-- New Container for Cost Estimation Form -->
+            <div class="max-w-md mx-auto lg:mx-100 lg:ml-auto bg-white rounded p-4 shadow-md animate__animated animate__fadeIn bg-repeat mt-4">
+                <h2 class="text-xl font-semibold mb-4">Get Your Budget Calculated!</h2>
+                <form id="costEstimationForm" class="mb-4">
+                    <div class="mb-4">
+                        <label for="foodCost" class="block font-semibold">Estimated Food Cost:</label>
+                        <input type="number" id="foodCost" class="w-full border border-gray-300 rounded p-2" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="travelCost" class="block font-semibold">Estimated Travel Cost:</label>
+                        <input type="number" id="travelCost" class="w-full border border-gray-300 rounded p-2" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="tollCost" class="block font-semibold">Estimated Toll Cost:</label>
+                        <input type="number" id="tollCost" class="w-full border border-gray-300 rounded p-2" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="accommodationCost" class="block font-semibold">Estimated Accommodation Cost:</label>
+                        <input type="number" id="accommodationCost" class="w-full border border-gray-300 rounded p-2" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="otherCost" class="block font-semibold">Estimated Other Cost:</label>
+                        <input type="number" id="otherCost" class="w-full border border-gray-300 rounded p-2" required>
+                    </div>
+
+                    <!-- New field for Enter no persons -->
+                    <div class="mb-4">
+                        <label for="noPersons" class="block font-semibold">Enter No. of Persons:</label>
+                        <input type="number" id="noPersons" class="w-full border border-gray-300 rounded p-2" required>
+                    </div>
+
+                    <button type="button" onclick="calculateTotalCost()" class="bg-yellow-500 text-white font-semibold py-2 px-4 rounded hover:bg-yellow-700">Calculate Total Cost</button>
+                    <a href="index.html" class="text-red-500 hover:text-gray-200 hover:bg-blue-500 transition">GO BACK</a>
+                </form>
+
+                <!-- Results Section for Cost Estimation -->
+                <h2 class="text-xl font-semibold mb-2">Cost Estimation Results</h2>
+                <canvas id="costChart" width="400" height="200"></canvas>
+                <p id="totalCost" class="text-gray-800 mt-2"></p>
+                <p id="costPerPerson" class="text-blue-500 mt-2"></p>
+                <p id="emergencyTip" class="text-yellow-600 mt-2"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Your existing JavaScript code
+        // ...
+
+        // New JavaScript code for Cost Estimation
+        function calculateTotalCost() {
+            const foodCost = parseFloat(document.getElementById("foodCost").value);
+            const travelCost = parseFloat(document.getElementById("travelCost").value);
+            const tollCost = parseFloat(document.getElementById("tollCost").value);
+            const accommodationCost = parseFloat(document.getElementById("accommodationCost").value);
+            const otherCost = parseFloat(document.getElementById("otherCost").value);
+            const noPersons = parseFloat(document.getElementById("noPersons").value);
+
+            const totalCost = foodCost + travelCost + tollCost + accommodationCost + otherCost;
+            const costPerPerson = totalCost / noPersons;
+            const emergencyTip = totalCost >= 1000 ? "Tip: Always keep Rs 1000 as emergency cost from the estimated total cost." : "";
+
+            // Display the results
+            document.getElementById("totalCost").textContent = `Estimated Total Cost: Rs ${totalCost.toFixed(2)}`;
+            document.getElementById("costPerPerson").textContent = `Estimated Cost Per Person: Rs ${costPerPerson.toFixed(2)}`;
+            document.getElementById("emergencyTip").textContent = emergencyTip;
+
+            // Update the chart
+            updateCostChart(foodCost, travelCost, tollCost, accommodationCost, otherCost);
+        }
+
+        function updateCostChart(foodCost, travelCost, tollCost, accommodationCost, otherCost) {
+            const ctx = document.getElementById("costChart").getContext("2d");
+
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: ["Food", "Travel", "Toll", "Accommodation", "Other"],
+                    datasets: [{
+                        label: "Cost Breakdown",
+                        data: [foodCost, travelCost, tollCost, accommodationCost, otherCost],
+                        backgroundColor: ["#FF5733", "#33FF57", "#3357FF", "#FF33A6", "#A633FF"],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
