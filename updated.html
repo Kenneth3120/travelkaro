@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Calculator</title>
+    <!-- Include Tailwind CSS from a CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Include Chart.js from a CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #1a202c;
+            color: #cbd5e0;
+        }
+
+        .container {
+            background-color: #2d3748;
+        }
+
+        label,
+        select,
+        input,
+        button {
+            background-color: #4a5568;
+            border-color: #4a5568;
+            color: #cbd5e0;
+        }
+
+        button:hover {
+            background-color: #2d3748;
+        }
+
+        p {
+            color: #48bb78;
+        }
+    </style>
+</head>
+
+<body class="p-4">
+    <div class="container mx-auto mt-8 p-8 rounded shadow-md">
+        <h1 class="text-2xl font-semibold mb-4 text-green-500">Travel Calculator</h1>
+        <form id="travelCalculatorForm">
+            <div class="mb-4">
+                <label for="from" class="block font-semibold">From:</label>
+                <select id="from" class="w-full border border-gray-300 rounded p-2" required>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Bangalore">Bangalore</option>
+                    <option value="Pune">Pune</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="to" class="block font-semibold">To:</label>
+                <select id="to" class="w-full border border-gray-300 rounded p-2" required>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Bangalore">Bangalore</option>
+                    <option value="Pune">Pune</option>
+                </select>
+            </div>
+
+            <div class="mb-4">
+                <label for="fuelPrice" class="block font-semibold">Current Fuel Price (per liter):</label>
+                <input type="number" id="fuelPrice" class="w-full border border-gray-300 rounded p-2" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="mileage" class="block font-semibold">Vehicle Mileage (km/liter):</label>
+                <input type="number" id="mileage" class="w-full border border-gray-300 rounded p-2" required>
+            </div>
+
+            <button type="button" onclick="calculateTotalCost()" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700">Calculate Total Cost</button>
+            <p id="travelResult" class="mt-2"></p>
+        </form>
+
+        <!-- Chart Container -->
+        <div class="mt-8">
+            <canvas id="costChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <script>
+        function calculateTotalCost() {
+            const from = document.getElementById("from").value;
+            const to = document.getElementById("to").value;
+            const fuelPrice = parseFloat(document.getElementById("fuelPrice").value);
+            const mileage = parseFloat(document.getElementById("mileage").value);
+
+            const distances = {
+                "Mumbai-Goa": 591,
+                "Goa-Mumbai": 591,
+                "Mumbai-Bangalore": 987,
+                "Bangalore-Mumbai": 987,
+                "Mumbai-Pune": 148,
+                "Pune-Mumbai": 148
+            };
+
+            const flightPrices = {
+                "Mumbai-Goa": 4500,
+                "Goa-Mumbai": 4800,
+                "Mumbai-Bangalore": 5600,
+                "Bangalore-Mumbai": 6500,
+                "Mumbai-Pune": 3000,
+                "Pune-Mumbai": 3200
+            };
+
+            const busPrices = {
+                "Mumbai-Goa": 2500,
+                "Goa-Mumbai": 2600,
+                "Mumbai-Bangalore": 3000,
+                "Bangalore-Mumbai": 3200,
+                "Mumbai-Pune": 600,
+                "Pune-Mumbai": 620
+            };
+
+            const distanceKey = `${from}-${to}`;
+            const distance = distances[distanceKey];
+            const fuelNeeded = distance / mileage;
+
+            const carCost = fuelNeeded * fuelPrice;
+            const flightCost = flightPrices[distanceKey];
+            const busCost = busPrices[distanceKey];
+
+            const result = `Estimated Total Cost:\nCar: Rs ${carCost.toFixed(2)} (${distance} Kms)\nFlight: Rs ${flightCost} (${distance} Kms)\nBus: Rs ${busCost} (${distance} Kms)`;
+            const cheapestOption = findCheapestOption(carCost, flightCost, busCost);
+
+            document.getElementById("travelResult").textContent = `${result}\nCheapest Option: ${cheapestOption}`;
+
+            updateCostChart(carCost, flightCost, busCost);
+        }
+
+        function updateCostChart(carCost, flightCost, busCost) {
+            const ctx = document.getElementById("costChart").getContext("2d");
+
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: ["Car", "Flight", "Bus"],
+                    datasets: [{
+                        label: "Travel Costs (Rs)",
+                        data: [carCost.toFixed(2), flightCost, busCost],
+                        backgroundColor: ["#4299E1", "#48BB78", "#F6E05E"],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function findCheapestOption(carCost, flightCost, busCost) {
+            const options = {
+                "Car": carCost,
+                "Flight": flightCost,
+                "Bus": busCost
+            };
+
+            const cheapestOption = Object.keys(options).reduce((a, b) => options[a] < options[b] ? a : b);
+            return cheapestOption;
+        }
+    </script>
+</body>
+
+</html>
